@@ -2,9 +2,19 @@
   "name": "clutchrpc",
   "module": "src/index.ts",
   "type": "module",
+  "main": "./dist/index.js",
   "scripts": {
-    "dev": "bun ./src/index.ts"
+    "dev": "bun src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target browser --format esm && tsc --emitDeclarationOnly"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "types": "./dist/index.d.ts",
   "devDependencies": {
     "@types/bun": "latest"
   },

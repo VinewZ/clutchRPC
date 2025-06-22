@@ -9,18 +9,16 @@ import (
 )
 
 type ToggleWindowServiceServer struct {
-	App       *application.App
-	IsVisible bool
+	App *application.App
 }
 
 func (s *ToggleWindowServiceServer) ToggleWindow(ctx context.Context, req *connect.Request[pb.ToggleWindowRequest]) (*connect.Response[pb.ToggleWindowResponse], error) {
-	if s.IsVisible {
+	if req.Msg.IsVisible {
 		s.App.Hide()
-		s.IsVisible = false
 	} else {
 		s.App.Show()
-		s.IsVisible = true
 	}
+
 	return &connect.Response[pb.ToggleWindowResponse]{
 		Msg: &pb.ToggleWindowResponse{},
 	}, nil

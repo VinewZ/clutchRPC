@@ -7,7 +7,6 @@ import (
 	"github.com/vinewz/clutchRPC/go/internal"
 	pbConnect "github.com/vinewz/clutchRPC/go/pb/clutch/v1/v1connect"
 	"github.com/wailsapp/wails/v3/pkg/application"
-	"google.golang.org/grpc"
 
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
@@ -20,6 +19,7 @@ import (
 type ClutchServer struct {
 	internal.ToggleWindowServiceServer
 	internal.UseShellServiceServer
+	internal.SayHiServiceServer
 }
 
 func withCORS(h http.Handler) http.Handler {
@@ -35,19 +35,26 @@ func withCORS(h http.Handler) http.Handler {
 // `timeout` controls how long to wait for user confirmation.
 func New(app *application.App) *ClutchServer {
 	return &ClutchServer{
-		ToggleWindowServiceServer: internal.ToggleWindowServiceServer{},
-		UseShellServiceServer: internal.UseShellServiceServer{
-			App: app,
-		},
+		ToggleWindowServiceServer: internal.ToggleWindowServiceServer{App: app},
+		UseShellServiceServer:     internal.UseShellServiceServer{App: app},
+		SayHiServiceServer:     internal.SayHiServiceServer{},
 	}
 }
 
-func (s *ClutchServer) ListenAndServe(gs *grpc.Server, addr string) error {
+func (s *ClutchServer) ListenAndServe(addr string) error {
 	mux := http.NewServeMux()
-	path, handler := pbConnect.NewUseShellServiceHandler(&s.UseShellServiceServer)
-	mux.Handle(path, handler)
-	path, handler = pbConnect.NewToggleWindowServiceHandler(&s.ToggleWindowServiceServer)
-	mux.Handle(path, handler)
+	{
+		path, handler := pbConnect.NewSayHiServiceHandler(&s.SayHiServiceServer)
+		mux.Handle(path, handler)
+	}
+	{
+		path, handler := pbConnect.NewUseShellServiceHandler(&s.UseShellServiceServer)
+		mux.Handle(path, handler)
+	}
+	{
+		path, handler := pbConnect.NewToggleWindowServiceHandler(&s.ToggleWindowServiceServer)
+		mux.Handle(path, handler)
+	}
 	corsMux := withCORS(mux)
 
 	finalHandler := h2c.NewHandler(corsMux, &http2.Server{})

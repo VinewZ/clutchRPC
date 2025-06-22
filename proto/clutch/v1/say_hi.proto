@@ -1,0 +1,16 @@
+syntax = "proto3";
+package clutch_rpc.v1;
+
+option go_package = "github.com/vinewz/clutchRPC/go/pb/clutch/v1";
+
+service SayHiService {
+  rpc SayHi(SayHiRequest) returns (SayHiResponse) {}
+}
+
+message SayHiRequest {
+  string greet = 1;
+}
+
+message SayHiResponse {
+  string greet = 1;
+}
