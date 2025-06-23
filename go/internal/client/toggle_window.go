@@ -18,9 +18,7 @@ func (c *ToggleWindowClient) ToggleWindow(ctx context.Context, isVisible bool) e
 	ctx, cancel := context.WithTimeout(ctx, time.Duration(c.TimeoutMS)*time.Millisecond)
 	defer cancel()
 
-	req := connect.NewRequest(&pb.ToggleWindowRequest{
-		IsVisible: isVisible,
-	})
+	req := connect.NewRequest(&pb.ToggleWindowRequest{})
 	_, err := c.Stub.ToggleWindow(ctx, req)
 	return err
 }

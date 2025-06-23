@@ -14,10 +14,6 @@ export declare const file_clutch_v1_toggle_window: GenFile;
  * @generated from message clutch_rpc.v1.ToggleWindowRequest
  */
 export declare type ToggleWindowRequest = Message<"clutch_rpc.v1.ToggleWindowRequest"> & {
-  /**
-   * @generated from field: bool is_visible = 1;
-   */
-  isVisible: boolean;
 };
 
 /**

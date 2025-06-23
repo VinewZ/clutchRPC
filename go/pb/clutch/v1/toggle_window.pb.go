@@ -23,7 +23,6 @@ const (
 
 type ToggleWindowRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	IsVisible     bool                   `protobuf:"varint,1,opt,name=is_visible,json=isVisible,proto3" json:"is_visible,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -56,13 +55,6 @@ func (x *ToggleWindowRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ToggleWindowRequest.ProtoReflect.Descriptor instead.
 func (*ToggleWindowRequest) Descriptor() ([]byte, []int) {
 	return file_clutch_v1_toggle_window_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *ToggleWindowRequest) GetIsVisible() bool {
-	if x != nil {
-		return x.IsVisible
-	}
-	return false
 }
 
 type ToggleWindowResponse struct {
@@ -105,10 +97,8 @@ var File_clutch_v1_toggle_window_proto protoreflect.FileDescriptor
 
 const file_clutch_v1_toggle_window_proto_rawDesc = "" +
 	"\n" +
-	"\x1dclutch/v1/toggle_window.proto\x12\rclutch_rpc.v1\"4\n" +
-	"\x13ToggleWindowRequest\x12\x1d\n" +
-	"\n" +
-	"is_visible\x18\x01 \x01(\bR\tisVisible\"\x16\n" +
+	"\x1dclutch/v1/toggle_window.proto\x12\rclutch_rpc.v1\"\x15\n" +
+	"\x13ToggleWindowRequest\"\x16\n" +
 	"\x14ToggleWindowResponse2p\n" +
 	"\x13ToggleWindowService\x12Y\n" +
 	"\fToggleWindow\x12\".clutch_rpc.v1.ToggleWindowRequest\x1a#.clutch_rpc.v1.ToggleWindowResponse\"\x00B-Z+github.com/vinewz/clutchRPC/go/pb/clutch/v1b\x06proto3"

@@ -7,8 +7,6 @@ service ToggleWindowService {
   rpc ToggleWindow(ToggleWindowRequest) returns (ToggleWindowResponse) {}
 }
 
-message ToggleWindowRequest {
-  bool is_visible = 1;
-}
+message ToggleWindowRequest {}
 
 message ToggleWindowResponse {}
