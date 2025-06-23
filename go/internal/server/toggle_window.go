@@ -9,15 +9,13 @@ import (
 )
 
 type ToggleWindowServiceServer struct {
-	App *application.App
+	App      *application.App
+	ToggleFn func()
 }
 
 func (s *ToggleWindowServiceServer) ToggleWindow(ctx context.Context, req *connect.Request[pb.ToggleWindowRequest]) (*connect.Response[pb.ToggleWindowResponse], error) {
-	if req.Msg.IsVisible {
-		s.App.Hide()
-	} else {
-		s.App.Show()
-	}
+
+	s.ToggleFn()
 
 	return &connect.Response[pb.ToggleWindowResponse]{
 		Msg: &pb.ToggleWindowResponse{},

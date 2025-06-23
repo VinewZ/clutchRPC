@@ -33,11 +33,11 @@ func withCORS(h http.Handler) http.Handler {
 
 // New returns a ClutchServer ready to be registered.
 // `timeout` controls how long to wait for user confirmation.
-func New(app *application.App) *ClutchServer {
+func New(app *application.App, toggleFn func()) *ClutchServer {
 	return &ClutchServer{
-		ToggleWindowServiceServer: server.ToggleWindowServiceServer{App: app},
+		ToggleWindowServiceServer: server.ToggleWindowServiceServer{App: app, ToggleFn: toggleFn},
 		UseShellServiceServer:     server.UseShellServiceServer{App: app},
-		SayHiServiceServer:     server.SayHiServiceServer{},
+		SayHiServiceServer:        server.SayHiServiceServer{},
 	}
 }
 
