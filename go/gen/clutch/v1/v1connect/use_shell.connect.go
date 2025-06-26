@@ -8,7 +8,7 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	v1 "github.com/vinewz/clutchRPC/go/pb/clutch/v1"
+	v1 "github.com/vinewz/clutchRPC/go/gen/clutch/v1"
 	http "net/http"
 	strings "strings"
 )
@@ -36,11 +36,15 @@ const (
 	// UseShellServiceUseShellProcedure is the fully-qualified name of the UseShellService's UseShell
 	// RPC.
 	UseShellServiceUseShellProcedure = "/clutch_rpc.v1.UseShellService/UseShell"
+	// UseShellServiceConfirmShellProcedure is the fully-qualified name of the UseShellService's
+	// ConfirmShell RPC.
+	UseShellServiceConfirmShellProcedure = "/clutch_rpc.v1.UseShellService/ConfirmShell"
 )
 
 // UseShellServiceClient is a client for the clutch_rpc.v1.UseShellService service.
 type UseShellServiceClient interface {
 	UseShell(context.Context, *connect.Request[v1.UseShellRequest]) (*connect.Response[v1.UseShellResponse], error)
+	ConfirmShell(context.Context, *connect.Request[v1.ConfirmShellRequest]) (*connect.Response[v1.ConfirmShellResponse], error)
 }
 
 // NewUseShellServiceClient constructs a client for the clutch_rpc.v1.UseShellService service. By
@@ -60,12 +64,19 @@ func NewUseShellServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(useShellServiceMethods.ByName("UseShell")),
 			connect.WithClientOptions(opts...),
 		),
+		confirmShell: connect.NewClient[v1.ConfirmShellRequest, v1.ConfirmShellResponse](
+			httpClient,
+			baseURL+UseShellServiceConfirmShellProcedure,
+			connect.WithSchema(useShellServiceMethods.ByName("ConfirmShell")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // useShellServiceClient implements UseShellServiceClient.
 type useShellServiceClient struct {
-	useShell *connect.Client[v1.UseShellRequest, v1.UseShellResponse]
+	useShell     *connect.Client[v1.UseShellRequest, v1.UseShellResponse]
+	confirmShell *connect.Client[v1.ConfirmShellRequest, v1.ConfirmShellResponse]
 }
 
 // UseShell calls clutch_rpc.v1.UseShellService.UseShell.
@@ -73,9 +84,15 @@ func (c *useShellServiceClient) UseShell(ctx context.Context, req *connect.Reque
 	return c.useShell.CallUnary(ctx, req)
 }
 
+// ConfirmShell calls clutch_rpc.v1.UseShellService.ConfirmShell.
+func (c *useShellServiceClient) ConfirmShell(ctx context.Context, req *connect.Request[v1.ConfirmShellRequest]) (*connect.Response[v1.ConfirmShellResponse], error) {
+	return c.confirmShell.CallUnary(ctx, req)
+}
+
 // UseShellServiceHandler is an implementation of the clutch_rpc.v1.UseShellService service.
 type UseShellServiceHandler interface {
 	UseShell(context.Context, *connect.Request[v1.UseShellRequest]) (*connect.Response[v1.UseShellResponse], error)
+	ConfirmShell(context.Context, *connect.Request[v1.ConfirmShellRequest]) (*connect.Response[v1.ConfirmShellResponse], error)
 }
 
 // NewUseShellServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -91,10 +108,18 @@ func NewUseShellServiceHandler(svc UseShellServiceHandler, opts ...connect.Handl
 		connect.WithSchema(useShellServiceMethods.ByName("UseShell")),
 		connect.WithHandlerOptions(opts...),
 	)
+	useShellServiceConfirmShellHandler := connect.NewUnaryHandler(
+		UseShellServiceConfirmShellProcedure,
+		svc.ConfirmShell,
+		connect.WithSchema(useShellServiceMethods.ByName("ConfirmShell")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/clutch_rpc.v1.UseShellService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UseShellServiceUseShellProcedure:
 			useShellServiceUseShellHandler.ServeHTTP(w, r)
+		case UseShellServiceConfirmShellProcedure:
+			useShellServiceConfirmShellHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -106,4 +131,8 @@ type UnimplementedUseShellServiceHandler struct{}
 
 func (UnimplementedUseShellServiceHandler) UseShell(context.Context, *connect.Request[v1.UseShellRequest]) (*connect.Response[v1.UseShellResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("clutch_rpc.v1.UseShellService.UseShell is not implemented"))
+}
+
+func (UnimplementedUseShellServiceHandler) ConfirmShell(context.Context, *connect.Request[v1.ConfirmShellRequest]) (*connect.Response[v1.ConfirmShellResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("clutch_rpc.v1.UseShellService.ConfirmShell is not implemented"))
 }

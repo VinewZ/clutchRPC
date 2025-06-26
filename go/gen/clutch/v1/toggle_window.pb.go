@@ -101,7 +101,7 @@ const file_clutch_v1_toggle_window_proto_rawDesc = "" +
 	"\x13ToggleWindowRequest\"\x16\n" +
 	"\x14ToggleWindowResponse2p\n" +
 	"\x13ToggleWindowService\x12Y\n" +
-	"\fToggleWindow\x12\".clutch_rpc.v1.ToggleWindowRequest\x1a#.clutch_rpc.v1.ToggleWindowResponse\"\x00B-Z+github.com/vinewz/clutchRPC/go/pb/clutch/v1b\x06proto3"
+	"\fToggleWindow\x12\".clutch_rpc.v1.ToggleWindowRequest\x1a#.clutch_rpc.v1.ToggleWindowResponse\"\x00B.Z,github.com/vinewz/clutchRPC/go/gen/clutch/v1b\x06proto3"
 
 var (
 	file_clutch_v1_toggle_window_proto_rawDescOnce sync.Once

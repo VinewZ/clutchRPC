@@ -1,0 +1,16 @@
+syntax = "proto3";
+package clutch_rpc.v1;
+
+option go_package = "github.com/vinewz/clutchRPC/go/gen/clutch/v1";
+
+service GreetService {
+  rpc Greet(GreetRequest) returns (GreetResponse) {}
+}
+
+message GreetRequest {
+  string name = 1;
+}
+
+message GreetResponse {
+  string greet = 1;
+}

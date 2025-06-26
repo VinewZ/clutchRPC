@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	pb "github.com/vinewz/clutchRPC/go/pb/clutch/v1"
-	pbconnect "github.com/vinewz/clutchRPC/go/pb/clutch/v1/v1connect"
+	pb "github.com/vinewz/clutchRPC/go/gen/clutch/v1"
+	pbconnect "github.com/vinewz/clutchRPC/go/gen/clutch/v1/v1connect"
 )
 
 type UseShellClient struct {
@@ -23,5 +23,20 @@ func (c *UseShellClient) UseShell(ctx context.Context, cmd string) (string, erro
 	if err != nil {
 		return "", err
 	}
-	return resp.Msg.GetOutput(), nil
+	return resp.Msg.Output, nil
+}
+
+func (c *UseShellClient) ConfirmShell(ctx context.Context, allow bool) error {
+  // same timeout pattern
+  ctx, cancel := context.WithTimeout(ctx, time.Duration(c.TimeoutMS)*time.Millisecond)
+  defer cancel()
+
+  req := connect.NewRequest(&pb.ConfirmShellRequest{
+    Allow: allow,
+  })
+  // we don’t care about the empty response message
+  if _, err := c.Stub.ConfirmShell(ctx, req); err != nil {
+    return err
+  }
+  return nil
 }

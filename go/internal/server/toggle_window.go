@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"connectrpc.com/connect"
-	pb "github.com/vinewz/clutchRPC/go/pb/clutch/v1"
+	pb "github.com/vinewz/clutchRPC/go/gen/clutch/v1"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 

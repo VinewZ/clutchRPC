@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/vinewz/clutchRPC/go/internal/server"
-	pbConnect "github.com/vinewz/clutchRPC/go/pb/clutch/v1/v1connect"
+	pbConnect "github.com/vinewz/clutchRPC/go/gen/clutch/v1/v1connect"
 	"github.com/wailsapp/wails/v3/pkg/application"
 
 	"golang.org/x/net/http2"
@@ -17,9 +17,9 @@ import (
 
 // ClutchServer encapsulates the gRPC service plus confirmation logic.
 type ClutchServer struct {
+	server.GreetServiceServer
 	server.ToggleWindowServiceServer
 	server.UseShellServiceServer
-	server.SayHiServiceServer
 }
 
 func withCORS(h http.Handler) http.Handler {
@@ -35,16 +35,16 @@ func withCORS(h http.Handler) http.Handler {
 // `timeout` controls how long to wait for user confirmation.
 func New(app *application.App, toggleFn func()) *ClutchServer {
 	return &ClutchServer{
+		GreetServiceServer:        server.GreetServiceServer{},
 		ToggleWindowServiceServer: server.ToggleWindowServiceServer{App: app, ToggleFn: toggleFn},
 		UseShellServiceServer:     server.UseShellServiceServer{App: app},
-		SayHiServiceServer:        server.SayHiServiceServer{},
 	}
 }
 
 func (s *ClutchServer) ListenAndServe(addr string) error {
 	mux := http.NewServeMux()
 	{
-		path, handler := pbConnect.NewSayHiServiceHandler(&s.SayHiServiceServer)
+		path, handler := pbConnect.NewGreetServiceHandler(&s.GreetServiceServer)
 		mux.Handle(path, handler)
 	}
 	{

@@ -1,7 +1,7 @@
 syntax = "proto3";
 package clutch_rpc.v1;
 
-option go_package = "github.com/vinewz/clutchRPC/go/pb/clutch/v1";
+option go_package = "github.com/vinewz/clutchRPC/go/gen/clutch/v1";
 
 service ToggleWindowService {
   rpc ToggleWindow(ToggleWindowRequest) returns (ToggleWindowResponse) {}
