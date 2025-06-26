@@ -16,7 +16,6 @@ import (
 	"github.com/rs/cors"
 )
 
-// ClutchServer encapsulates the gRPC service plus confirmation logic.
 type ClutchServer struct {
 	server.GreetServiceServer
 	server.ToggleWindowServiceServer

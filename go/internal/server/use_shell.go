@@ -26,6 +26,7 @@ func (s *UseShellServiceServer) UseShell(
 	req *connect.Request[v1.UseShellRequest],
 ) (*connect.Response[v1.UseShellResponse], error) {
 	s.Mu.Lock()
+	fmt.Println("server Mu:", &s.Mu)
 	if s.ConfirmCh != nil {
 		s.Mu.Unlock()
 		return nil, fmt.Errorf("Another confirmation is pending")

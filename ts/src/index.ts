@@ -44,15 +44,5 @@ export function createClient(port: number) {
       }
     },
 
-    async confirmShell({ allow }: Pick<ConfirmShellRequest, "allow">) {
-      try {
-        const response = await shellClient.confirmShell({ allow });
-        return response;
-      } catch (error) {
-        console.error("Error confirming shell:", error);
-        throw error;
-      }
-    },
-
   };
 }
