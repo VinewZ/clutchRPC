@@ -3,9 +3,10 @@ package clutchrpc
 import (
 	"log"
 	"net/http"
+	"sync"
 
-	"github.com/vinewz/clutchRPC/go/internal/server"
 	pbConnect "github.com/vinewz/clutchRPC/go/gen/clutch/v1/v1connect"
+	"github.com/vinewz/clutchRPC/go/internal/server"
 	"github.com/wailsapp/wails/v3/pkg/application"
 
 	"golang.org/x/net/http2"
@@ -33,11 +34,11 @@ func withCORS(h http.Handler) http.Handler {
 
 // New returns a ClutchServer ready to be registered.
 // `timeout` controls how long to wait for user confirmation.
-func New(app *application.App, toggleFn func()) *ClutchServer {
+func New(app *application.App, toggleFn func(), mu *sync.Mutex, confirmCh chan bool) *ClutchServer {
 	return &ClutchServer{
 		GreetServiceServer:        server.GreetServiceServer{},
 		ToggleWindowServiceServer: server.ToggleWindowServiceServer{App: app, ToggleFn: toggleFn},
-		UseShellServiceServer:     server.UseShellServiceServer{App: app},
+		UseShellServiceServer:     server.UseShellServiceServer{App: app, Mu: mu, ConfirmCh: confirmCh},
 	}
 }
 

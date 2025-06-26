@@ -15,8 +15,8 @@ import (
 type UseShellServiceServer struct {
 	App *application.App
 
-	Mu         sync.Mutex
-	ConfirmCh  chan bool
+	Mu        *sync.Mutex
+	ConfirmCh chan bool
 }
 
 // UseShell sends a confirmation event to the frontend and waits (with timeout) for the user's answer.
