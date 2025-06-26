@@ -26,7 +26,6 @@ func (s *UseShellServiceServer) UseShell(
 	req *connect.Request[v1.UseShellRequest],
 ) (*connect.Response[v1.UseShellResponse], error) {
 	s.Mu.Lock()
-	fmt.Println("server Mu:", &s.Mu)
 	if len(s.ConfirmCh) > 0 {
 		// there’s already a confirmation waiting to be consumed
 		s.Mu.Unlock()
@@ -42,6 +41,8 @@ func (s *UseShellServiceServer) UseShell(
 
 	fmt.Printf("Waiting for confirmation to run command: %q\n", cmd)
 
+	fmt.Println("RPC Mu:", &s.Mu)
+	fmt.Println("RPC Ch:", &s.ConfirmCh)
 	select {
 	case confirmed := <-s.ConfirmCh:
 		s.Mu.Lock()
