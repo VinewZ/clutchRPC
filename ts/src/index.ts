@@ -1,21 +1,8 @@
 import { createClient as connectCreateClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
-import { UseShellService } from "./gen/clutch/v1/use_shell_pb";
+import { UseShellService, type ConfirmShellRequest, type UseShellRequest } from "./gen/clutch/v1/use_shell_pb";
 import { ToggleWindowService } from "./gen/clutch/v1/toggle_window_pb";
-import { SayHiService } from "./gen/clutch/v1/say_hi_pb";
-
-type SayHiReq = {
-  greet: string
-}
-
-type UseShellReq = {
-  appName: string
-  command: string
-}
-
-type ToggleWindowReq = {
-  isVisible: boolean
-}
+import { GreetService, type GreetRequest } from "./gen/clutch/v1/greet_pb";
 
 export function createClient(port: number) {
   const transport = createConnectTransport({
@@ -24,14 +11,12 @@ export function createClient(port: number) {
 
   const shellClient = connectCreateClient(UseShellService, transport);
   const windowClient = connectCreateClient(ToggleWindowService, transport);
-  const sayHiClient = connectCreateClient(SayHiService, transport);
+  const greetClient = connectCreateClient(GreetService, transport);
 
   return {
-    async sayHi({ greet }: SayHiReq) {
-      const request: SayHiReq = { greet }
-
+    async greet({ name }: Pick<GreetRequest, "name">) {
       try {
-        const response = await sayHiClient.sayHi(request);
+        const response = await greetClient.greet({ name });
         return response;
       } catch (error) {
         console.error("Error using shell:", error);
@@ -39,27 +24,35 @@ export function createClient(port: number) {
       }
     },
 
-    async useShell({ appName, command }: UseShellReq) {
-      const request: UseShellReq = { appName, command };
-
+    async toggleWindow() {
       try {
-        const response = await shellClient.useShell(request);
-        return response;
-      } catch (error) {
-        console.error("Error using shell:", error);
-        throw error;
-      }
-    },
-    async toggleWindow({ isVisible }: ToggleWindowReq) {
-      const request: ToggleWindowReq = { isVisible }
-      try {
-        const response = await windowClient.toggleWindow(request);
+        const response = await windowClient.toggleWindow({});
         return response;
       } catch (error) {
         console.error("Error toggling window:", error);
         throw error;
       }
-    }
+    },
+
+    async useShell({ appName, command }: Pick<UseShellRequest, "appName" | "command">) {
+      try {
+        const response = await shellClient.useShell({ appName, command });
+        return response;
+      } catch (error) {
+        console.error("Error using shell:", error);
+        throw error;
+      }
+    },
+
+    async confirmShell({ allow }: Pick<ConfirmShellRequest, "allow">) {
+      try {
+        const response = await shellClient.confirmShell({ allow });
+        return response;
+      } catch (error) {
+        console.error("Error confirming shell:", error);
+        throw error;
+      }
+    },
+
   };
 }
-
