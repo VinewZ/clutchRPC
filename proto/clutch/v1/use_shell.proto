@@ -5,7 +5,6 @@ option go_package = "github.com/vinewz/clutchRPC/go/gen/clutch/v1";
 
 service UseShellService {
   rpc UseShell(UseShellRequest) returns (UseShellResponse) {}
-  rpc ConfirmShell(ConfirmShellRequest) returns (ConfirmShellResponse);
 }
 
 message UseShellRequest {
@@ -17,9 +16,3 @@ message UseShellResponse {
   string output = 1;
   string error = 2;
 }
-
-message ConfirmShellRequest {
-  bool allow = 1;
-}
-
-message ConfirmShellResponse {}

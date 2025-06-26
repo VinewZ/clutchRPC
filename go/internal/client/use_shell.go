@@ -25,18 +25,3 @@ func (c *UseShellClient) UseShell(ctx context.Context, cmd string) (string, erro
 	}
 	return resp.Msg.Output, nil
 }
-
-func (c *UseShellClient) ConfirmShell(ctx context.Context, allow bool) error {
-  // same timeout pattern
-  ctx, cancel := context.WithTimeout(ctx, time.Duration(c.TimeoutMS)*time.Millisecond)
-  defer cancel()
-
-  req := connect.NewRequest(&pb.ConfirmShellRequest{
-    Allow: allow,
-  })
-  // we don’t care about the empty response message
-  if _, err := c.Stub.ConfirmShell(ctx, req); err != nil {
-    return err
-  }
-  return nil
-}

@@ -53,34 +53,6 @@ export declare type UseShellResponse = Message<"clutch_rpc.v1.UseShellResponse">
 export declare const UseShellResponseSchema: GenMessage<UseShellResponse>;
 
 /**
- * @generated from message clutch_rpc.v1.ConfirmShellRequest
- */
-export declare type ConfirmShellRequest = Message<"clutch_rpc.v1.ConfirmShellRequest"> & {
-  /**
-   * @generated from field: bool allow = 1;
-   */
-  allow: boolean;
-};
-
-/**
- * Describes the message clutch_rpc.v1.ConfirmShellRequest.
- * Use `create(ConfirmShellRequestSchema)` to create a new message.
- */
-export declare const ConfirmShellRequestSchema: GenMessage<ConfirmShellRequest>;
-
-/**
- * @generated from message clutch_rpc.v1.ConfirmShellResponse
- */
-export declare type ConfirmShellResponse = Message<"clutch_rpc.v1.ConfirmShellResponse"> & {
-};
-
-/**
- * Describes the message clutch_rpc.v1.ConfirmShellResponse.
- * Use `create(ConfirmShellResponseSchema)` to create a new message.
- */
-export declare const ConfirmShellResponseSchema: GenMessage<ConfirmShellResponse>;
-
-/**
  * @generated from service clutch_rpc.v1.UseShellService
  */
 export declare const UseShellService: GenService<{
@@ -91,14 +63,6 @@ export declare const UseShellService: GenService<{
     methodKind: "unary";
     input: typeof UseShellRequestSchema;
     output: typeof UseShellResponseSchema;
-  },
-  /**
-   * @generated from rpc clutch_rpc.v1.UseShellService.ConfirmShell
-   */
-  confirmShell: {
-    methodKind: "unary";
-    input: typeof ConfirmShellRequestSchema;
-    output: typeof ConfirmShellResponseSchema;
   },
 }>;
 

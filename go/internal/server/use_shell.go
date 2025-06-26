@@ -15,8 +15,8 @@ import (
 type UseShellServiceServer struct {
 	App *application.App
 
-	mu        sync.Mutex
-	confirmCh chan bool
+	Mu         sync.Mutex
+	ConfirmCh  chan bool
 }
 
 // UseShell sends a confirmation event to the frontend and waits (with timeout) for the user's answer.
@@ -25,15 +25,15 @@ func (s *UseShellServiceServer) UseShell(
 	ctx context.Context,
 	req *connect.Request[v1.UseShellRequest],
 ) (*connect.Response[v1.UseShellResponse], error) {
-	s.mu.Lock()
-	if s.confirmCh != nil {
-		s.mu.Unlock()
+	s.Mu.Lock()
+	if s.ConfirmCh != nil {
+		s.Mu.Unlock()
 		return nil, fmt.Errorf("Another confirmation is pending")
 	}
 	ch := make(chan bool, 1)
-	s.confirmCh = ch
+	s.ConfirmCh = ch
 	cmd := req.Msg.Command
-	s.mu.Unlock()
+	s.Mu.Unlock()
 
 	s.App.EmitEvent("clutch:require-confirmation", map[string]string{
 		"appName": req.Msg.AppName,
@@ -44,18 +44,18 @@ func (s *UseShellServiceServer) UseShell(
 
 	select {
 	case confirmed := <-ch:
-		s.mu.Lock()
-		s.confirmCh = nil
-		s.mu.Unlock()
+		s.Mu.Lock()
+		s.ConfirmCh = nil
+		s.Mu.Unlock()
 
 		if !confirmed {
 			return nil, fmt.Errorf("Command %q cancelled by user", cmd)
 		}
 
 	case <-time.After(30 * time.Second):
-		s.mu.Lock()
-		s.confirmCh = nil
-		s.mu.Unlock()
+		s.Mu.Lock()
+		s.ConfirmCh = nil
+		s.Mu.Unlock()
 		return nil, fmt.Errorf("Confirmation for %q timed out", cmd)
 	}
 
@@ -68,21 +68,4 @@ func (s *UseShellServiceServer) UseShell(
 	return connect.NewResponse(&v1.UseShellResponse{
 		Output: output,
 	}), nil
-}
-
-// ConfirmShell is called by the frontend to send back the user's decision.
-// It unblocks the pending UseShell call by sending `allow` into the channel.
-func (s *UseShellServiceServer) ConfirmShell(
-	ctx context.Context,
-	req *connect.Request[v1.ConfirmShellRequest],
-) (*connect.Response[v1.ConfirmShellResponse], error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	if s.confirmCh == nil {
-		return nil, fmt.Errorf("no command is pending confirmation")
-	}
-
-	s.confirmCh <- req.Msg.Allow
-	return connect.NewResponse(&v1.ConfirmShellResponse{}), nil
 }

@@ -8,7 +8,7 @@ import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2
  * Describes the file clutch/v1/use_shell.proto.
  */
 export const file_clutch_v1_use_shell = /*@__PURE__*/
-  fileDesc("ChljbHV0Y2gvdjEvdXNlX3NoZWxsLnByb3RvEg1jbHV0Y2hfcnBjLnYxIjQKD1VzZVNoZWxsUmVxdWVzdBIQCghhcHBfbmFtZRgBIAEoCRIPCgdjb21tYW5kGAIgASgJIjEKEFVzZVNoZWxsUmVzcG9uc2USDgoGb3V0cHV0GAEgASgJEg0KBWVycm9yGAIgASgJIiQKE0NvbmZpcm1TaGVsbFJlcXVlc3QSDQoFYWxsb3cYASABKAgiFgoUQ29uZmlybVNoZWxsUmVzcG9uc2UyuQEKD1VzZVNoZWxsU2VydmljZRJNCghVc2VTaGVsbBIeLmNsdXRjaF9ycGMudjEuVXNlU2hlbGxSZXF1ZXN0Gh8uY2x1dGNoX3JwYy52MS5Vc2VTaGVsbFJlc3BvbnNlIgASVwoMQ29uZmlybVNoZWxsEiIuY2x1dGNoX3JwYy52MS5Db25maXJtU2hlbGxSZXF1ZXN0GiMuY2x1dGNoX3JwYy52MS5Db25maXJtU2hlbGxSZXNwb25zZUIuWixnaXRodWIuY29tL3ZpbmV3ei9jbHV0Y2hSUEMvZ28vZ2VuL2NsdXRjaC92MWIGcHJvdG8z");
+  fileDesc("ChljbHV0Y2gvdjEvdXNlX3NoZWxsLnByb3RvEg1jbHV0Y2hfcnBjLnYxIjQKD1VzZVNoZWxsUmVxdWVzdBIQCghhcHBfbmFtZRgBIAEoCRIPCgdjb21tYW5kGAIgASgJIjEKEFVzZVNoZWxsUmVzcG9uc2USDgoGb3V0cHV0GAEgASgJEg0KBWVycm9yGAIgASgJMmAKD1VzZVNoZWxsU2VydmljZRJNCghVc2VTaGVsbBIeLmNsdXRjaF9ycGMudjEuVXNlU2hlbGxSZXF1ZXN0Gh8uY2x1dGNoX3JwYy52MS5Vc2VTaGVsbFJlc3BvbnNlIgBCLlosZ2l0aHViLmNvbS92aW5ld3ovY2x1dGNoUlBDL2dvL2dlbi9jbHV0Y2gvdjFiBnByb3RvMw");
 
 /**
  * Describes the message clutch_rpc.v1.UseShellRequest.
@@ -23,20 +23,6 @@ export const UseShellRequestSchema = /*@__PURE__*/
  */
 export const UseShellResponseSchema = /*@__PURE__*/
   messageDesc(file_clutch_v1_use_shell, 1);
-
-/**
- * Describes the message clutch_rpc.v1.ConfirmShellRequest.
- * Use `create(ConfirmShellRequestSchema)` to create a new message.
- */
-export const ConfirmShellRequestSchema = /*@__PURE__*/
-  messageDesc(file_clutch_v1_use_shell, 2);
-
-/**
- * Describes the message clutch_rpc.v1.ConfirmShellResponse.
- * Use `create(ConfirmShellResponseSchema)` to create a new message.
- */
-export const ConfirmShellResponseSchema = /*@__PURE__*/
-  messageDesc(file_clutch_v1_use_shell, 3);
 
 /**
  * @generated from service clutch_rpc.v1.UseShellService
