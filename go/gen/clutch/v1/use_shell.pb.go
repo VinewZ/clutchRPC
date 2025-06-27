@@ -25,6 +25,7 @@ type UseShellRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AppName       string                 `protobuf:"bytes,1,opt,name=app_name,json=appName,proto3" json:"app_name,omitempty"`
 	Command       string                 `protobuf:"bytes,2,opt,name=command,proto3" json:"command,omitempty"`
+	Timeout       int64                  `protobuf:"varint,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -71,6 +72,13 @@ func (x *UseShellRequest) GetCommand() string {
 		return x.Command
 	}
 	return ""
+}
+
+func (x *UseShellRequest) GetTimeout() int64 {
+	if x != nil {
+		return x.Timeout
+	}
+	return 0
 }
 
 type UseShellResponse struct {
@@ -129,10 +137,11 @@ var File_clutch_v1_use_shell_proto protoreflect.FileDescriptor
 
 const file_clutch_v1_use_shell_proto_rawDesc = "" +
 	"\n" +
-	"\x19clutch/v1/use_shell.proto\x12\rclutch_rpc.v1\"F\n" +
+	"\x19clutch/v1/use_shell.proto\x12\rclutch_rpc.v1\"`\n" +
 	"\x0fUseShellRequest\x12\x19\n" +
 	"\bapp_name\x18\x01 \x01(\tR\aappName\x12\x18\n" +
-	"\acommand\x18\x02 \x01(\tR\acommand\"@\n" +
+	"\acommand\x18\x02 \x01(\tR\acommand\x12\x18\n" +
+	"\atimeout\x18\x03 \x01(\x03R\atimeout\"@\n" +
 	"\x10UseShellResponse\x12\x16\n" +
 	"\x06output\x18\x01 \x01(\tR\x06output\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error2`\n" +

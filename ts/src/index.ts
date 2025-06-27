@@ -37,9 +37,9 @@ export function createClient(port: number) {
       }
     },
 
-    async useShell({ appName, command }: Pick<UseShellRequest, "appName" | "command">): Promise<UseShellResponse> {
+    async useShell({ appName, command, timeout }: Pick<UseShellRequest, "appName" | "command" | "timeout">): Promise<UseShellResponse> {
       try {
-        const response = await shellClient.useShell({ appName, command });
+        const response = await shellClient.useShell({ appName, command, timeout });
         return response;
       } catch (error) {
         console.error("Error using shell:", error);

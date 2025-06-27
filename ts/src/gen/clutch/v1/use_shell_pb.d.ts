@@ -23,6 +23,11 @@ export declare type UseShellRequest = Message<"clutch_rpc.v1.UseShellRequest"> &
    * @generated from field: string command = 2;
    */
   command: string;
+
+  /**
+   * @generated from field: int64 timeout = 3;
+   */
+  timeout: bigint;
 };
 
 /**
