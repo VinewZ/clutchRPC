@@ -46,6 +46,5 @@ export function createClient(port: number) {
         return Promise.reject(error);
       }
     },
-
   };
 }

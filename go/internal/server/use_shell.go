@@ -25,44 +25,48 @@ func (s *UseShellServiceServer) UseShell(
 	ctx context.Context,
 	req *connect.Request[v1.UseShellRequest],
 ) (*connect.Response[v1.UseShellResponse], error) {
-	s.Mu.Lock()
-	fmt.Println(len(s.ConfirmCh))
-	if len(s.ConfirmCh) > 0 {
-		// there’s already a confirmation waiting to be consumed
-		s.Mu.Unlock()
-		return nil, fmt.Errorf("Another confirmation is pending")
-	}
 	cmd := req.Msg.Command
+
+	// 1) Quick busy-check under the lock.
+	s.Mu.Lock()
+	if len(s.ConfirmCh) > 0 {
+		s.Mu.Unlock()
+		return nil, fmt.Errorf("another confirmation is pending")
+	}
 	s.Mu.Unlock()
 
+	// 2) Fire the “please confirm” event
 	s.App.EmitEvent("clutch:require-confirmation", map[string]string{
 		"appName": req.Msg.AppName,
 		"command": cmd,
 	})
-
 	fmt.Printf("Waiting for confirmation to run command: %q\n", cmd)
 
+	// 3) Wait for either confirmation or timeout
 	select {
 	case confirmed := <-s.ConfirmCh:
-		s.Mu.Lock()
-		s.ConfirmCh = nil
-		s.Mu.Unlock()
-
+		// reading from the channel automatically empties the buffer
 		if !confirmed {
-			return nil, fmt.Errorf("Command %q cancelled by user", cmd)
+			return nil, fmt.Errorf("command %q cancelled by user", cmd)
 		}
 
 	case <-time.After(30 * time.Second):
+		// if we time out, drain any late-arriving confirmation
 		s.Mu.Lock()
-		s.ConfirmCh = nil
+		select {
+		case <-s.ConfirmCh:
+		default:
+		}
 		s.Mu.Unlock()
-		return nil, fmt.Errorf("Confirmation for %q timed out", cmd)
+
+		return nil, fmt.Errorf("confirmation for %q timed out", cmd)
 	}
 
+	// 4) Run the shell command
 	outBytes, err := exec.Command("sh", "-c", cmd).CombinedOutput()
 	output := string(outBytes)
 	if err != nil {
-		return nil, fmt.Errorf("Command %q failed: %w\noutput:\n%s", cmd, err, output)
+		return nil, fmt.Errorf("command %q failed: %w\noutput:\n%s", cmd, err, output)
 	}
 
 	return connect.NewResponse(&v1.UseShellResponse{
