@@ -1,8 +1,11 @@
 import { createClient as connectCreateClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
-import { UseShellService, type ConfirmShellRequest, type UseShellRequest } from "./gen/clutch/v1/use_shell_pb";
+import type { UseShellRequest, UseShellResponse } from "./gen/clutch/v1/use_shell_pb";
+import type { ToggleWindowResponse } from "./gen/clutch/v1/toggle_window_pb";
+import type { GreetRequest, GreetResponse } from "./gen/clutch/v1/greet_pb";
+import { UseShellService } from "./gen/clutch/v1/use_shell_pb";
 import { ToggleWindowService } from "./gen/clutch/v1/toggle_window_pb";
-import { GreetService, type GreetRequest } from "./gen/clutch/v1/greet_pb";
+import { GreetService } from "./gen/clutch/v1/greet_pb";
 
 export function createClient(port: number) {
   const transport = createConnectTransport({
@@ -14,33 +17,33 @@ export function createClient(port: number) {
   const greetClient = connectCreateClient(GreetService, transport);
 
   return {
-    async greet({ name }: Pick<GreetRequest, "name">) {
+    async greet({ name }: Pick<GreetRequest, "name">): Promise<GreetResponse> {
       try {
         const response = await greetClient.greet({ name });
         return response;
       } catch (error) {
         console.error("Error using shell:", error);
-        throw error;
+        return Promise.reject(error);
       }
     },
 
-    async toggleWindow() {
+    async toggleWindow(): Promise<ToggleWindowResponse> {
       try {
         const response = await windowClient.toggleWindow({});
         return response;
       } catch (error) {
         console.error("Error toggling window:", error);
-        throw error;
+        return Promise.reject(error);
       }
     },
 
-    async useShell({ appName, command }: Pick<UseShellRequest, "appName" | "command">) {
+    async useShell({ appName, command }: Pick<UseShellRequest, "appName" | "command">): Promise<UseShellResponse> {
       try {
         const response = await shellClient.useShell({ appName, command });
         return response;
       } catch (error) {
         console.error("Error using shell:", error);
-        throw error;
+        return Promise.reject(error);
       }
     },
 
