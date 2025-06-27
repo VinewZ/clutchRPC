@@ -25,7 +25,7 @@ type UseShellRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AppName       string                 `protobuf:"bytes,1,opt,name=app_name,json=appName,proto3" json:"app_name,omitempty"`
 	Command       string                 `protobuf:"bytes,2,opt,name=command,proto3" json:"command,omitempty"`
-	TimeoutMs     int64                  `protobuf:"varint,3,opt,name=timeout_ms,json=timeoutMs,proto3" json:"timeout_ms,omitempty"`
+	TimeoutMs     int32                  `protobuf:"varint,3,opt,name=timeout_ms,json=timeoutMs,proto3" json:"timeout_ms,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -74,7 +74,7 @@ func (x *UseShellRequest) GetCommand() string {
 	return ""
 }
 
-func (x *UseShellRequest) GetTimeoutMs() int64 {
+func (x *UseShellRequest) GetTimeoutMs() int32 {
 	if x != nil {
 		return x.TimeoutMs
 	}
@@ -142,7 +142,7 @@ const file_clutch_v1_use_shell_proto_rawDesc = "" +
 	"\bapp_name\x18\x01 \x01(\tR\aappName\x12\x18\n" +
 	"\acommand\x18\x02 \x01(\tR\acommand\x12\x1d\n" +
 	"\n" +
-	"timeout_ms\x18\x03 \x01(\x03R\ttimeoutMs\"@\n" +
+	"timeout_ms\x18\x03 \x01(\x05R\ttimeoutMs\"@\n" +
 	"\x10UseShellResponse\x12\x16\n" +
 	"\x06output\x18\x01 \x01(\tR\x06output\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error2`\n" +
