@@ -50,7 +50,7 @@ func (s *UseShellServiceServer) UseShell(
 			return nil, fmt.Errorf("command %q cancelled by user", cmd)
 		}
 
-	case <-time.After(time.Duration(req.Msg.Timeout) * time.Second):
+	case <-time.After(time.Duration(req.Msg.TimeoutMs) * time.Millisecond):
 		// if we time out, drain any late-arriving confirmation
 		s.Mu.Lock()
 		select {

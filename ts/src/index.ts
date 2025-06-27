@@ -17,12 +17,12 @@ export function createClient(port: number) {
   const greetClient = connectCreateClient(GreetService, transport);
 
   return {
-    async greet({ name }: Pick<GreetRequest, "name">): Promise<GreetResponse> {
+    async greet(req: Omit<GreetRequest, "$typeName">): Promise<GreetResponse> {
       try {
-        const response = await greetClient.greet({ name });
+        const response = await greetClient.greet(req);
         return response;
       } catch (error) {
-        console.error("Error using shell:", error);
+        console.error("Error on Greet Call", error);
         return Promise.reject(error);
       }
     },
@@ -37,9 +37,9 @@ export function createClient(port: number) {
       }
     },
 
-    async useShell({ appName, command, timeout }: Pick<UseShellRequest, "appName" | "command" | "timeout">): Promise<UseShellResponse> {
+    async useShell(req: Omit<UseShellRequest, "$typeName">): Promise<UseShellResponse> {
       try {
-        const response = await shellClient.useShell({ appName, command, timeout });
+        const response = await shellClient.useShell(req);
         return response;
       } catch (error) {
         console.error("Error using shell:", error);
